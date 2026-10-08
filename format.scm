@@ -57,17 +57,12 @@
     #f))
 
 ;;@doc
-;; Concatenate a list of stdout strings into a single string, skipping
-;; whitespace-only entries. Returns "" for empty/#f input.
+;; Concatenate a list of stdout strings into a single string. Returns "" for
+;; empty/#f input. Whitespace-only entries are kept: servers may split output
+;; anywhere, so a lone " " or "\n" can be part of what the code printed.
 (define (format-output-list output)
   (if (and output (not (null? output)))
-    (let loop ([items output] [acc '()])
-      (if (null? items)
-        (apply string-append (reverse acc))
-        (loop (cdr items)
-          (if (whitespace-only? (car items))
-            acc
-            (cons (car items) acc)))))
+    (apply string-append output)
     ""))
 
 ;;@doc
